@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-Test IT Governance Essential</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      padding: 30px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 1rem;
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    .question-number {
+      display: inline-block;
+      background: #0ea5e9;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 12px;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: rgba(14,165,233,0.12);
+      border-color: #38bdf8;
+    }
+
+    .option input {
+      margin-top: 4px;
+      transform: scale(1.15);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      border: none;
+      padding: 16px 32px;
+      color: white;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: 0.3s ease;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .center {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .score {
+      font-size: 5rem;
+      color: #38bdf8;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .status {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .correct {
+      border-left: 5px solid #22c55e;
+      padding-left: 15px;
+      margin-top: 15px;
+    }
+
+    .wrong {
+      border-left: 5px solid #ef4444;
+      padding-left: 15px;
+      margin-top: 15px;
+    }
+
+    .discussion {
+      margin-top: 15px;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #94a3b8;
+    }
+
+    @media(max-width:768px){
+      body {
+        padding: 15px;
+      }
+
+      .score {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- QUIZ PAGE -->
+  <div id="quizPage">
+
+    <div class="card">
+      <h1>Pre-Test IT Governance Essential</h1>
+
+      <p class="subtitle">
+        Modern CBT Assessment System<br>
+        Materi meliputi IT Governance, COBIT 2019, Risk Management,
+        IT Service Management (ITSM), dan ISO 27001.
+      </p>
+
+      <div class="grid">
+        <input type="text" id="nama" placeholder="Nama Peserta">
+        <input type="text" id="instansi" placeholder="Instansi / Perusahaan">
+      </div>
+    </div>
+
+    <form id="quizForm"></form>
+
+    <div class="center">
+      <button class="btn" onclick="submitQuiz()" type="button">
+        Submit Jawaban
+      </button>
+    </div>
+
+  </div>
+
+  <!-- RESULT PAGE -->
+  <div id="resultPage" class="hidden">
+
+    <div class="card center">
+      <h1>Hasil Pre-Test</h1>
+
+      <div class="score" id="scoreText">0</div>
+
+      <div class="status" id="statusText"></div>
+
+      <p id="summaryText"></p>
+
+      <div style="margin-top:30px;">
+        <button class="btn" onclick="showReview()">
+          Lihat Kunci Jawaban & Pembahasan
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REVIEW PAGE -->
+  <div id="reviewPage" class="hidden">
+
+    <div class="card">
+      <h1>Kunci Jawaban & Pembahasan</h1>
+
+      <p class="subtitle">
+        Review jawaban peserta beserta pembahasan lengkap.
+      </p>
+    </div>
+
+    <div id="reviewContainer"></div>
+
+  </div>
+
+  <div class="footer">
+    Modern HTML CBT • IT Governance Essential
+  </div>
+
+</div>
+
+<script>
+
+  const questions = [
+
+    {
+      question: 'Menurut ISO/IEC 38500:2015, apa definisi dari IT Governance?',
+      options: {
+        A: 'Proses teknis untuk melakukan instalasi perangkat keras dan lunak.',
+        B: 'Sistem yang memastikan penggunaan teknologi informasi mendukung dan memungkinkan organisasi mencapai strategi dan tujuannya.',
+        C: 'Departemen yang bertanggung jawab penuh atas seluruh anggaran operasional perusahaan.',
+        D: 'Serangkaian aturan hukum untuk menindak pelanggaran siber.'
+      },
+      answer: 'B',
+      discussion: 'IT Governance memastikan penggunaan TI mendukung strategi dan tujuan organisasi.'
+    },
+
+    {
+      question: 'Manakah dari berikut ini yang merupakan salah satu dari empat aspek utama dalam IT Governance?',
+      options: {
+        A: 'Profitabilitas harian.',
+        B: 'Kecepatan koneksi internet.',
+        C: 'Akuntabilitas.',
+        D: 'Jumlah perangkat komputer.'
+      },
+      answer: 'C',
+      discussion: 'Akuntabilitas menjelaskan siapa yang bertanggung jawab atas keputusan TI.'
+    },
+
+    {
+      question: 'Berapa jumlah Governance & Management Objectives dalam COBIT 2019?',
+      options: {
+        A: '34 Objectives.',
+        B: '37 Objectives.',
+        C: '40 Objectives.',
+        D: '114 Objectives.'
+      },
+      answer: 'C',
+      discussion: 'COBIT 2019 memiliki total 40 Governance & Management Objectives.'
+    },
+
+    {
+      question: 'Domain manakah dalam COBIT 2019 yang menjadi tanggung jawab utama Dewan Direksi dan C-Suite?',
+      options: {
+        A: 'APO (Align, Plan, Organise)',
+        B: 'BAI (Build, Acquire, Implement)',
+        C: 'DSS (Deliver, Service, Support)',
+        D: 'EDM (Evaluate, Direct, Monitor)'
+      },
+      answer: 'D',
+      discussion: 'EDM merupakan domain governance utama pada COBIT 2019.'
+    },
+
+    {
+      question: 'Apa yang dimaksud dengan Risk Appetite?',
+      options: {
+        A: 'Batas operasional dari variasi risiko yang dapat diterima.',
+        B: 'Jumlah risiko yang bersedia diterima organisasi dalam mengejar tujuannya secara strategis.',
+        C: 'Tindakan untuk menghentikan seluruh aktivitas berisiko.',
+        D: 'Daftar seluruh insiden yang sudah terjadi di masa lalu.'
+      },
+      answer: 'B',
+      discussion: 'Risk Appetite adalah tingkat risiko strategis yang bersedia diterima organisasi.'
+    },
+
+    {
+      question: 'Dalam opsi Risk Treatment (ARTA), apa yang dimaksud dengan Transfer?',
+      options: {
+        A: 'Mengurangi kemungkinan risiko.',
+        B: 'Memindahkan risiko ke pihak ketiga melalui kontrak atau asuransi.',
+        C: 'Menerima risiko secara sadar.',
+        D: 'Menghapus sistem yang dianggap berbahaya.'
+      },
+      answer: 'B',
+      discussion: 'Transfer berarti risiko dipindahkan ke pihak ketiga.'
+    },
+
+    {
+      question: 'Apa filosofi inti dari IT Service Management (ITSM)?',
+      options: {
+        A: 'Menjual perangkat keras sebanyak mungkin.',
+        B: 'Mengelola IT sebagai layanan yang memberikan nilai bagi bisnis.',
+        C: 'Memastikan tim IT memiliki otoritas tertinggi.',
+        D: 'Menghilangkan ketergantungan bisnis terhadap teknologi.'
+      },
+      answer: 'B',
+      discussion: 'ITSM berfokus pada penyediaan layanan TI yang memberikan value.'
+    },
+
+    {
+      question: 'Praktik manakah dalam ITIL 4 yang berfungsi sebagai Single Point of Contact?',
+      options: {
+        A: 'Incident Management',
+        B: 'Problem Management',
+        C: 'Service Desk',
+        D: 'Change Enablement'
+      },
+      answer: 'C',
+      discussion: 'Service Desk adalah titik kontak utama pengguna layanan TI.'
+    },
+
+    {
+      question: 'Struktur Annex A ISO/IEC 27001:2022 terdiri dari 93 kontrol yang dikelompokkan ke dalam berapa tema?',
+      options: {
+        A: '4 Tema',
+        B: '10 Tema',
+        C: '14 Tema',
+        D: '34 Tema'
+      },
+      answer: 'A',
+      discussion: 'ISO 27001:2022 mengelompokkan kontrol ke dalam 4 tema besar.'
+    },
+
+    {
+      question: 'Dokumen wajib manakah dalam ISO 27001 yang mencantumkan seluruh kontrol Annex A?',
+      options: {
+        A: 'Risk Register',
+        B: 'Statement of Applicability (SoA)',
+        C: 'Business Impact Analysis',
+        D: 'IT Charter'
+      },
+      answer: 'B',
+      discussion: 'SoA mendokumentasikan seluruh kontrol Annex A dan status implementasinya.'
+    }
+
+  ];
+
+  const quizForm = document.getElementById('quizForm');
+
+  let userAnswers = [];
+
+  questions.forEach((item, index) => {
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    let optionsHTML = '';
+
+    for (const key in item.options) {
+
+      optionsHTML += `
+        <label class="option">
+          <input type="radio" name="q${index}" value="${key}">
+          <span><strong>${key}.</strong> ${item.options[key]}</span>
+        </label>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="question-number">Soal ${index + 1}</div>
+
+      <div class="question">
+        ${item.question}
+      </div>
+
+      ${optionsHTML}
+    `;
+
+    quizForm.appendChild(card);
+
+  });
+
+  function submitQuiz() {
+
+    let score = 0;
+    userAnswers = [];
+
+    questions.forEach((q, index) => {
+
+      const selected =
+        document.querySelector(`input[name="q${index}"]:checked`);
+
+      const value = selected ? selected.value : '-';
+
+      userAnswers.push(value);
+
+      if (value === q.answer) {
+        score++;
+      }
+
+    });
+
+    const percentage =
+      Math.round((score / questions.length) * 100);
+
+    document.getElementById('quizPage')
+      .classList.add('hidden');
+
+    document.getElementById('resultPage')
+      .classList.remove('hidden');
+
+    document.getElementById('scoreText')
+      .innerText = percentage;
+
+    let status = 'Perlu Pendalaman';
+
+    if (percentage >= 85) {
+      status = 'Excellent';
+    }
+    else if (percentage >= 70) {
+      status = 'Good';
+    }
+    else if (percentage >= 50) {
+      status = 'Fair';
+    }
+
+    document.getElementById('statusText')
+      .innerText = status;
+
+    const nama =
+      document.getElementById('nama').value || 'Peserta';
+
+    const instansi =
+      document.getElementById('instansi').value || '-';
+
+    document.getElementById('summaryText').innerHTML = `
+      <strong>${nama}</strong><br>
+      ${instansi}<br><br>
+      Jawaban Benar: ${score} dari ${questions.length} soal
+    `;
+  }
+
+  function showReview() {
+
+    document.getElementById('resultPage')
+      .classList.add('hidden');
+
+    document.getElementById('reviewPage')
+      .classList.remove('hidden');
+
+    const container =
+      document.getElementById('reviewContainer');
+
+    container.innerHTML = '';
+
+    questions.forEach((q, index) => {
+
+      const userAnswer = userAnswers[index];
+
+      const isCorrect =
+        userAnswer === q.answer;
+
+      const card =
+        document.createElement('div');
+
+      card.className = 'card';
+
+      let optionsHTML = '';
+
+      for (const key in q.options) {
+
+        let style = '';
+
+        if (key === q.answer) {
+          style = 'color:#22c55e;font-weight:bold;';
+        }
+
+        if (key === userAnswer && key !== q.answer) {
+          style = 'color:#ef4444;font-weight:bold;';
+        }
+
+        optionsHTML += `
+          <div style="margin-bottom:10px;${style}">
+            <strong>${key}.</strong> ${q.options[key]}
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="question-number">
+          Soal ${index + 1}
+        </div>
+
+        <div class="question">
+          ${q.question}
+        </div>
+
+        ${optionsHTML}
+
+        <div class="${isCorrect ? 'correct' : 'wrong'}">
+          Jawaban Anda:
+          <strong>${userAnswer}</strong><br>
+
+          Jawaban Benar:
+          <strong>${q.answer}</strong>
+        </div>
+
+        <div class="discussion">
+          <strong>Pembahasan:</strong><br>
+          ${q.discussion}
+        </div>
+      `;
+
+      container.appendChild(card);
+
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
+
+</script>
+
+</body>
+</html>
