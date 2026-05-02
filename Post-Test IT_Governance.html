@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT Governance Essentials - Modern CBT</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      padding: 30px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    h1 {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 1rem;
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    .question-number {
+      display: inline-block;
+      background: #0ea5e9;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 12px;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: rgba(14,165,233,0.12);
+      border-color: #38bdf8;
+    }
+
+    .option input {
+      margin-top: 4px;
+      transform: scale(1.15);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      border: none;
+      padding: 16px 32px;
+      color: white;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: 0.3s ease;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .center {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .score {
+      font-size: 5rem;
+      color: #38bdf8;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .status {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .correct {
+      border-left: 5px solid #22c55e;
+      padding-left: 15px;
+      margin-top: 15px;
+    }
+
+    .wrong {
+      border-left: 5px solid #ef4444;
+      padding-left: 15px;
+      margin-top: 15px;
+    }
+
+    .discussion {
+      margin-top: 15px;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #94a3b8;
+    }
+
+    @media(max-width:768px){
+      body {
+        padding: 15px;
+      }
+
+      .score {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div id="quizPage">
+      <div class="card">
+        <h1>IT Governance Essentials</h1>
+        <p class="subtitle">
+          Modern CBT Assessment System<br>
+          Materi meliputi ISO 31000, ISO 27001, ITIL 4, Audit TI, COBIT 2019, BCM, dan Kepatuhan Regulasi.
+        </p>
+
+        <div class="grid">
+          <input type="text" id="nama" placeholder="Nama Peserta">
+          <input type="text" id="instansi" placeholder="Instansi / Perusahaan">
+        </div>
+      </div>
+
+      <form id="quizForm"></form>
+
+      <div class="center">
+        <button class="btn" onclick="submitQuiz()" type="button">
+          Submit Jawaban
+        </button>
+      </div>
+    </div>
+
+    <div id="resultPage" class="hidden">
+      <div class="card center">
+        <h1>Hasil Post-Test</h1>
+        <div class="score" id="scoreText">0</div>
+        <div class="status" id="statusText"></div>
+        <p id="summaryText"></p>
+
+        <div style="margin-top:30px;">
+          <button class="btn" onclick="showReview()">
+            Lihat Kunci Jawaban & Pembahasan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="reviewPage" class="hidden">
+      <div class="card">
+        <h1>Kunci Jawaban & Pembahasan</h1>
+        <p class="subtitle">
+          Review jawaban peserta beserta pembahasan lengkap.
+        </p>
+      </div>
+
+      <div id="reviewContainer"></div>
+    </div>
+
+    <div class="footer">
+      Modern HTML CBT • IT Governance Essentials
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: 'Manakah pernyataan yang paling akurat mengenai perbedaan fundamental antara Risk Appetite dan Risk Tolerance?',
+        options: {
+          A: 'Risk Appetite bersifat operasional dan kuantitatif, sedangkan Risk Tolerance bersifat strategis.',
+          B: 'Risk Appetite ditetapkan oleh Manajer IT, sedangkan Risk Tolerance ditetapkan oleh Direksi.',
+          C: 'Risk Appetite adalah jumlah risiko strategis yang bersedia diterima organisasi, sedangkan Risk Tolerance adalah ambang batas variasi operasional yang terukur.',
+          D: 'Risk Appetite berfungsi sebagai pemicu eskalasi, sedangkan Risk Tolerance dicantumkan dalam Risk Appetite Statement (RAS).',
+          E: 'Risk Appetite hanya berlaku untuk risiko negatif, sedangkan Risk Tolerance mencakup peluang positif.'
+        },
+        answer: 'C',
+        discussion: 'Risk Appetite bersifat strategis dan menggambarkan tingkat risiko yang bersedia diterima organisasi, sedangkan Risk Tolerance adalah batas variasi operasional yang masih dapat diterima.'
+      },
+      {
+        question: 'Dalam kerangka kerja Risk Treatment (ARTA), opsi Accept secara profesional dilakukan apabila...',
+        options: {
+          A: 'Kontrol preventif telah gagal diimplementasikan oleh tim teknis.',
+          B: 'Biaya implementasi kontrol lebih tinggi dibandingkan dampak finansial dari risiko tersebut.',
+          C: 'Risiko telah dipindahkan sepenuhnya kepada vendor asuransi siber.',
+          D: 'Organisasi memutuskan untuk menghentikan layanan yang berkaitan dengan risiko.',
+          E: 'Risiko berada dalam level Kritis pada matriks risiko sehingga harus diterima.'
+        },
+        answer: 'B',
+        discussion: 'Accept dilakukan apabila biaya mitigasi lebih besar daripada dampak risiko sehingga risiko diputuskan untuk diterima.'
+      },
+      {
+        question: 'Seorang Manajer TI ingin memantau risiko ketersediaan sistem secara proaktif. Manakah yang merupakan contoh Key Risk Indicator (KRI) yang tepat?',
+        options: {
+          A: 'Persentase karyawan yang telah mengikuti security awareness training',
+          B: 'Jumlah upaya intrusi jaringan yang terdeteksi oleh firewall',
+          C: 'Jumlah temuan audit tahun lalu yang belum ditindaklanjuti.',
+          D: 'Persentase kegagalan rekonsiliasi data pada proses batch',
+          E: 'Mean Time to Repair (MTTR) dan frekuensi pelanggaran SLA per kuartal.'
+        },
+        answer: 'E',
+        discussion: 'MTTR dan SLA breach dapat digunakan sebagai indikator risiko ketersediaan layanan TI.'
+      },
+      {
+        question: 'Berdasarkan hierarki reliabilitas bukti audit, bukti manakah yang memberikan tingkat keyakinan tertinggi bagi auditor?',
+        options: {
+          A: 'Penjelasan lisan dari pimpinan divisi infrastruktur saat wawancara.',
+          B: 'Bukti yang dihasilkan langsung oleh auditor melalui observasi atau reperformance.',
+          C: 'Dokumen kebijakan internal yang ditandatangani Direksi.',
+          D: 'Log sistem yang disediakan admin database.',
+          E: 'Sertifikat kepatuhan vendor melalui email.'
+        },
+        answer: 'B',
+        discussion: 'Bukti yang diperoleh langsung oleh auditor memiliki tingkat assurance paling tinggi.'
+      },
+      {
+        question: 'Saat menyusun temuan audit menggunakan 5C Framework, komponen yang menjelaskan akar penyebab masalah disebut...',
+        options: {
+          A: 'Condition',
+          B: 'Criteria',
+          C: 'Cause',
+          D: 'Consequence',
+          E: 'Corrective Action'
+        },
+        answer: 'C',
+        discussion: 'Cause menjelaskan mengapa suatu kondisi atau gap dapat terjadi.'
+      },
+      {
+        question: 'Manakah dari kontrol berikut yang dikategorikan sebagai Application Controls?',
+        options: {
+          A: 'Pembatasan akses logis pada sistem operasi server.',
+          B: 'Prosedur manajemen perubahan jaringan.',
+          C: 'Validasi format NIK dan pembatasan nilai transaksi pada formulir input.',
+          D: 'Kebijakan backup data organisasi.',
+          E: 'Pengaturan suhu ruang data center.'
+        },
+        answer: 'C',
+        discussion: 'Validasi input merupakan bagian dari application controls.'
+      },
+      {
+        question: 'Struktur Annex A ISO/IEC 27001:2022 terdiri dari empat tema besar yaitu...',
+        options: {
+          A: 'Planning, Support, Operation, Performance',
+          B: 'Organizational, People, Physical, Technological',
+          C: 'Governance, Risk, Compliance, Technical',
+          D: 'Context, Leadership, Support, Improvement',
+          E: 'Access Control, Cryptography, Physical, Network'
+        },
+        answer: 'B',
+        discussion: 'ISO 27001:2022 mengelompokkan kontrol Annex A menjadi Organizational, People, Physical, dan Technological.'
+      },
+      {
+        question: 'Dokumen Statement of Applicability (SoA) memiliki peran kritikal karena...',
+        options: {
+          A: 'Berisi seluruh aset informasi organisasi.',
+          B: 'Mencantumkan seluruh kontrol Annex A beserta justifikasi penerapan atau pengecualian.',
+          C: 'Menggantikan laporan risk assessment.',
+          D: 'Mengatur anggaran keamanan.',
+          E: 'Hanya berisi kontrol teknis.'
+        },
+        answer: 'B',
+        discussion: 'SoA mendokumentasikan status implementasi seluruh kontrol Annex A.'
+      },
+      {
+        question: 'Menurut Klausul 5 ISO 27001:2022, tanggung jawab utama top management dalam ISMS adalah...',
+        options: {
+          A: 'Mendelegasikan keamanan kepada vendor.',
+          B: 'Melakukan vulnerability scanning.',
+          C: 'Menunjukkan kepemimpinan dan komitmen terhadap ISMS.',
+          D: 'Memastikan zero risk.',
+          E: 'Menyerahkan management review kepada auditor internal.'
+        },
+        answer: 'C',
+        discussion: 'Klausul 5 menekankan leadership dan commitment manajemen puncak.'
+      },
+      {
+        question: 'Dalam ITIL 4, komponen yang mendeskripsikan aktivitas organisasi untuk value co-creation disebut...',
+        options: {
+          A: 'Service Value Chain',
+          B: 'Guiding Principles',
+          C: 'Service Value System (SVS)',
+          D: 'Four Dimensions',
+          E: 'Management Practices'
+        },
+        answer: 'C',
+        discussion: 'SVS merupakan model utama dalam ITIL 4.'
+      },
+      {
+        question: 'Prinsip ITIL 4 Start Where You Are menyarankan organisasi untuk...',
+        options: {
+          A: 'Membangun sistem dari nol.',
+          B: 'Mengabaikan proses lama.',
+          C: 'Melakukan penilaian kondisi saat ini.',
+          D: 'Fokus pada otomasi penuh.',
+          E: 'Menggunakan teknologi terbaru.'
+        },
+        answer: 'C',
+        discussion: 'Organisasi perlu memahami kondisi saat ini sebelum melakukan perubahan.'
+      },
+      {
+        question: 'Perbedaan utama Incident Management dan Problem Management adalah...',
+        options: {
+          A: 'Incident fokus akar masalah.',
+          B: 'Incident fokus pemulihan layanan, Problem fokus pencegahan insiden berulang.',
+          C: 'Incident proaktif, Problem reaktif.',
+          D: 'Incident hanya untuk infrastruktur.',
+          E: 'Keduanya sama.'
+        },
+        answer: 'B',
+        discussion: 'Incident Management fokus restore service, sedangkan Problem Management fokus root cause.'
+      },
+      {
+        question: 'Dalam operasional TI, Service Desk memiliki peran strategis sebagai...',
+        options: {
+          A: 'Tim ahli database.',
+          B: 'Auditor internal.',
+          C: 'Single Point of Contact antara pengguna dan TI.',
+          D: 'Penyetuju seluruh perubahan.',
+          E: 'Bagian hukum vendor.'
+        },
+        answer: 'C',
+        discussion: 'Service Desk berfungsi sebagai SPOC bagi pengguna layanan TI.'
+      },
+      {
+        question: 'Metrik BCM yang menentukan durasi maksimal pemulihan layanan disebut...',
+        options: {
+          A: 'RPO',
+          B: 'MTPD',
+          C: 'RTO',
+          D: 'MBCO',
+          E: 'MTTR'
+        },
+        answer: 'C',
+        discussion: 'RTO menentukan target waktu pemulihan layanan.'
+      },
+      {
+        question: 'Karakteristik utama strategi Hot Site dibandingkan Cold Site adalah...',
+        options: {
+          A: 'Biaya lebih murah.',
+          B: 'Fasilitas siap pakai dengan sinkronisasi real-time.',
+          C: 'RTO lebih dari 72 jam.',
+          D: 'Hanya ruang fisik.',
+          E: 'Menunggu pengiriman perangkat baru.'
+        },
+        answer: 'B',
+        discussion: 'Hot Site siap digunakan dengan data sinkron secara real-time.'
+      },
+      {
+        question: 'Mengapa MTPD dianggap sebagai batas kritis dalam BCM?',
+        options: {
+          A: 'Menentukan jumlah data hilang.',
+          B: 'Jika melampaui MTPD organisasi dapat mengalami kerugian permanen.',
+          C: 'Standar tabletop exercise.',
+          D: 'Level layanan minimum.',
+          E: 'Menghitung premi asuransi.'
+        },
+        answer: 'B',
+        discussion: 'MTPD adalah batas maksimum gangguan yang masih dapat ditoleransi.'
+      },
+      {
+        question: 'Berdasarkan UU PDP No. 27/2022, notifikasi kegagalan perlindungan data wajib diberikan maksimal...',
+        options: {
+          A: '1 x 24 jam',
+          B: '3 x 24 jam',
+          C: '14 hari kerja',
+          D: '30 hari kalender',
+          E: '72 jam'
+        },
+        answer: 'C',
+        discussion: 'UU PDP menetapkan batas maksimal 14 hari kerja.'
+      },
+      {
+        question: 'Menurut POJK No. 11/2022, insiden TI signifikan wajib dilaporkan kepada OJK dalam waktu...',
+        options: {
+          A: '1 x 24 jam',
+          B: '3 x 24 jam',
+          C: '14 hari kerja',
+          D: 'Setelah diketahui nasabah',
+          E: '30 hari setelah investigasi'
+        },
+        answer: 'B',
+        discussion: 'POJK No. 11/2022 mewajibkan pelaporan maksimal 3 x 24 jam.'
+      },
+      {
+        question: 'Dokumen yang menjadi landasan utama BCM untuk menentukan prioritas pemulihan adalah...',
+        options: {
+          A: 'Risk Register',
+          B: 'Business Impact Analysis (BIA)',
+          C: 'Statement of Applicability',
+          D: 'Disaster Recovery Plan',
+          E: 'Audit Program'
+        },
+        answer: 'B',
+        discussion: 'BIA digunakan untuk menentukan prioritas pemulihan dan target BCM.'
+      },
+      {
+        question: 'Objektif COBIT 2019 DSS02 dapat dioperasionalkan melalui praktik ITIL 4 yaitu...',
+        options: {
+          A: 'Problem Management dan Change Enablement.',
+          B: 'Service Request Management dan Incident Management.',
+          C: 'Service Level Management.',
+          D: 'Infrastructure and Platform Management.',
+          E: 'Governance Oversight.'
+        },
+        answer: 'B',
+        discussion: 'DSS02 selaras dengan praktik Incident dan Service Request Management.'
+      }
+    ];
+
+    const quizForm = document.getElementById('quizForm');
+    let userAnswers = [];
+
+    questions.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      let optionsHTML = '';
+
+      for (const key in item.options) {
+        optionsHTML += `
+          <label class="option">
+            <input type="radio" name="q${index}" value="${key}">
+            <span><strong>${key}.</strong> ${item.options[key]}</span>
+          </label>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="question-number">Soal ${index + 1}</div>
+        <div class="question">${item.question}</div>
+        ${optionsHTML}
+      `;
+
+      quizForm.appendChild(card);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      userAnswers = [];
+
+      questions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const value = selected ? selected.value : '-';
+
+        userAnswers.push(value);
+
+        if (value === q.answer) {
+          score++;
+        }
+      });
+
+      const percentage = Math.round((score / questions.length) * 100);
+
+      document.getElementById('quizPage').classList.add('hidden');
+      document.getElementById('resultPage').classList.remove('hidden');
+
+      document.getElementById('scoreText').innerText = percentage;
+
+      let status = 'Perlu Peningkatan';
+      if (percentage >= 85) status = 'Excellent';
+      else if (percentage >= 70) status = 'Good';
+      else if (percentage >= 50) status = 'Fair';
+
+      document.getElementById('statusText').innerText = status;
+
+      const nama = document.getElementById('nama').value || 'Peserta';
+      const instansi = document.getElementById('instansi').value || '-';
+
+      document.getElementById('summaryText').innerHTML = `
+        <strong>${nama}</strong><br>
+        ${instansi}<br><br>
+        Jawaban Benar: ${score} dari ${questions.length} soal
+      `;
+    }
+
+    function showReview() {
+      document.getElementById('resultPage').classList.add('hidden');
+      document.getElementById('reviewPage').classList.remove('hidden');
+
+      const container = document.getElementById('reviewContainer');
+      container.innerHTML = '';
+
+      questions.forEach((q, index) => {
+        const userAnswer = userAnswers[index];
+        const isCorrect = userAnswer === q.answer;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        let optionsHTML = '';
+
+        for (const key in q.options) {
+          let style = '';
+
+          if (key === q.answer) {
+            style = 'color:#22c55e;font-weight:bold;';
+          }
+
+          if (key === userAnswer && key !== q.answer) {
+            style = 'color:#ef4444;font-weight:bold;';
+          }
+
+          optionsHTML += `
+            <div style="margin-bottom:10px;${style}">
+              <strong>${key}.</strong> ${q.options[key]}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="question-number">Soal ${index + 1}</div>
+          <div class="question">${q.question}</div>
+
+          ${optionsHTML}
+
+          <div class="${isCorrect ? 'correct' : 'wrong'}">
+            Jawaban Anda: <strong>${userAnswer}</strong><br>
+            Jawaban Benar: <strong>${q.answer}</strong>
+          </div>
+
+          <div class="discussion">
+            <strong>Pembahasan:</strong><br>
+            ${q.discussion}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
